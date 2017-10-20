@@ -16,7 +16,19 @@ body {
 .row {
   margin-top: 80px;
 }
-
+.result-btn {
+  color: #ffffff;
+  background-color: #F89406;
+  border: none;
+}
+.result-btn:hover,
+.result-btn:focus,
+.result-btn:active,
+.result-btn.active {
+  color: #ffffff;
+  background-color: #FA8900;
+  border: none;
+}
 .upload-btn {
   color: #ffffff;
   background-color: #F89406;
