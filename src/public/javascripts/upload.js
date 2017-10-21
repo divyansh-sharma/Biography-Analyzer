@@ -1,9 +1,30 @@
+$('.next-btn').on('click', function (){
+$('html,body').animate({
+        scrollTop: $(".panel-body1").offset().top},
+        'slow');
+});
 $('.upload-btn').on('click', function (){
     $('#upload-input').click();
     $('.progress-bar').text('0%');
     $('.progress-bar').width('0%');
+	
 });
-
+$('.result-btn').on('click', function (){
+    var techwords=$('#techkeywords').val();
+	var emowords=$('#emokeywords').val();
+	var data={"techkeywords":techwords,"emokeywords":emowords};
+	
+	 $.ajax({
+      url: '/result',
+      type: 'POST',
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+      success: function(data){
+          console.log('keyword transfer successful!\n');
+      },
+	   });
+	
+});
 $('#upload-input').on('change', function(){
 
   var files = $(this).get(0).files;

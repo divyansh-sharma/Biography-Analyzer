@@ -29,5 +29,11 @@ export default {
       public: true,
     },
   },
+  '/result': {
+    post: {
+      method: TestController.getResults,
+      public: true,
+    },
+  },
 };
 

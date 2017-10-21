@@ -5,7 +5,7 @@ import TestService from '../services/TestService';
 
 
 export default {
-  testMethod,helloWorld,getFiles,uploadFiles
+  testMethod,helloWorld,getFiles,uploadFiles,getResults,readFiles
 };
 
 /**
@@ -15,7 +15,28 @@ export default {
  */
 async function helloWorld(req, res) {
   const result = await TestService.helloWorld();
+  console.log("i m here");
   res.json(result);
+  
+}
+async function readFiles(path) {
+  var fs= require('fs');
+  
+  fs.readdir(path, function(err, items) {
+    console.log(items);
+
+    for (var i=0; i<items.length; i++) {
+        console.log(items[i]);
+    }
+});
+}
+async function getResults(req,res){
+var fs= require('fs');
+var path = require('path');
+console.log(JSON.stringify(req.body));
+var data = {};
+readFiles(path.resolve(__dirname, 'uploads/'));
+
 }
 async function uploadFiles(req,res){
 var path = require('path');
