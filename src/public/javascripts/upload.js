@@ -3,6 +3,11 @@ $('html,body').animate({
         scrollTop: $(".panel-body1").offset().top},
         'slow');
 });
+$('.next-btn2').on('click', function (){
+$('html,body').animate({
+        scrollTop: $(".panel-body2").offset().top},
+        'slow');
+});
 $('.upload-btn').on('click', function (){
     $('#upload-input').click();
     $('.progress-bar').text('0%');

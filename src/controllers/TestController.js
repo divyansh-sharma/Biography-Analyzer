@@ -5,7 +5,7 @@ import TestService from '../services/TestService';
 
 
 export default {
-  testMethod,helloWorld,getFiles,uploadFiles,getResults,readFiles
+  testMethod,helloWorld,getFiles,uploadFiles,getResults
 };
 
 /**
@@ -19,23 +19,31 @@ async function helloWorld(req, res) {
   res.json(result);
   
 }
-async function readFiles(path) {
-  var fs= require('fs');
-  
-  fs.readdir(path, function(err, items) {
-    console.log(items);
 
-    for (var i=0; i<items.length; i++) {
-        console.log(items[i]);
-    }
-});
-}
 async function getResults(req,res){
 var fs= require('fs');
 var path = require('path');
 console.log(JSON.stringify(req.body));
-var data = {};
-readFiles(path.resolve(__dirname, 'uploads/'));
+var filedata = [];
+
+fs.readdir(path.resolve(__dirname, 'uploads/'), function(err, items) {
+    console.log(items);
+
+    for (var i=0; i<items.length; i++) {
+        console.log(items[i]);
+		fs.readFile(path.resolve(path.resolve(__dirname, 'uploads/'), items[i]), 'utf-8',function (err,data) {
+  if (err) {
+    return console.log(err);
+  }
+  
+  filedata.push(data);
+  
+  //console.log(filedata); //logs values to the console
+});
+    }
+	
+});
+console.log(filedata); //empty array,i want file data here for further processing
 
 }
 async function uploadFiles(req,res){
