@@ -24,6 +24,27 @@ function refresh(){
 
 }
 }
+unction translate(fildata,lansrc,langdes){
+	var watson = require('watson-developer-cloud');
+  var language_translator = watson.language_translator({
+  username: '32835e5a-e472-4c16-ab0c-b702f9ca852a',
+  password: 'MUG44fhNWSpT',
+  url:'https://gateway.watsonplatform.net/language-translator/api/',
+  version: 'v2'
+});
+return new Promise(function(resolve, reject) {
+	language_translator.translate({
+    text: filedata,
+    source: langsrc,
+    target: langdes
+  }, function(err, translation) {
+    if (err)
+      console.log(err)
+    else
+      resolve(translation);
+});
+});
+}
 function identifyLanguage(filedata){
 	var watson = require('watson-developer-cloud');
 var language_translator = watson.language_translator({
