@@ -24,6 +24,24 @@ function refresh(){
 
 }
 }
+function identifyLanguage(filedata){
+	var watson = require('watson-developer-cloud');
+var language_translator = watson.language_translator({
+  username: '32835e5a-e472-4c16-ab0c-b702f9ca852a',
+  password: 'MUG44fhNWSpT',
+  url:'https://gateway.watsonplatform.net/language-translator/api/',
+  version: 'v2'
+});
+return new Promise(function(resolve, reject) {
+language_translator.identify({ text: filedata},
+  function(err, identifiedLanguages) {
+    if (err)
+      console.log(err)
+    else
+      resolve(identifiedLanguages);
+});
+});	
+}
 function analyzeTone(filedata){
 	
 	var ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
@@ -148,6 +166,15 @@ translated_data.push(translate(filedata[i]));
 } */
 var tpromises=[];
 var ppromises=[];
+var ilpromises=[];
+for(i=0;i<filedata.length;i++)
+{
+ ilpromises.push(identifyLanguage(filedata[i]));	
+}
+Promise.all(ilpromises).then(function(identifiedLanguages){
+	console.log("done");
+	console.log(JSON.Stringify(identifiedLanguages));
+});
 for(i=0;i<filedata.length;i++)
 { 
  tpromises.push(analyzeTone(filedata[i]));
