@@ -30,6 +30,7 @@ $('.result-btn').on('click', function (){
 	   });
 	
 });
+
 $('#upload-input').on('change', function(){
 
   var files = $(this).get(0).files;

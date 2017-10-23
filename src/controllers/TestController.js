@@ -24,7 +24,7 @@ function refresh(){
 
 }
 }
-unction translate(fildata,lansrc,langdes){
+function translate(filedata,langsrc,langdes){
 	var watson = require('watson-developer-cloud');
   var language_translator = watson.language_translator({
   username: '32835e5a-e472-4c16-ab0c-b702f9ca852a',
@@ -33,6 +33,16 @@ unction translate(fildata,lansrc,langdes){
   version: 'v2'
 });
 return new Promise(function(resolve, reject) {
+	if(langsrc=='en')
+		resolve({
+  translations: [{
+    translation: filedata
+  }],
+  word_count: null,
+  character_count: null
+});
+	else
+	{
 	language_translator.translate({
     text: filedata,
     source: langsrc,
@@ -41,8 +51,10 @@ return new Promise(function(resolve, reject) {
     if (err)
       console.log(err)
     else
-      resolve(translation);
+	{  //console.log(translation);
+		resolve(translation);}
 });
+} //else over
 });
 }
 function identifyLanguage(filedata){
@@ -76,7 +88,6 @@ return new Promise(function(resolve, reject) {
   var params = {
   // Get the text from the JSON file.
    text: filedata,
-   tones : 'emotion',
    sentences: false
    };  
    tone_analyzer.tone(params, function(error, tones) {
@@ -163,9 +174,12 @@ async function helloWorld(req, res) {
 async function getResults(req,res){
 var fs= require('fs');
 var path = require('path');
-console.log(JSON.stringify(req.body));
+fs.writeFile(path.resolve(__dirname, 'saved/keywords.json'), JSON.stringify(req.body,null,3),'utf8', (err) => {
+			if (err) throw err;
+			console.log('The file keywords has been saved!');
+				});
+//res.end(JSON.stringify(req.body));
 var filedata = [];
-var translated_data=[];
 var fnames=[];
 var blahhh=[];
 /*readFileContents(path.resolve(__dirname, 'uploads/'))
@@ -175,6 +189,7 @@ var blahhh=[];
 .catch(function(err) {
      console.log(err);
    }); */
+   
 fnames=fs.readdirSync(path.resolve(__dirname, 'uploads/'));
 for (var i=0; i<fnames.length; i++) {
         console.log(fnames[i]);
@@ -185,8 +200,7 @@ console.log(filedata); // filedata is now a array of file contents
 /*for (var i=0; i<filedata.length; i++) {
 translated_data.push(translate(filedata[i]));
 } */
-var tpromises=[];
-var ppromises=[];
+
 var ilpromises=[];
 for(i=0;i<filedata.length;i++)
 {
@@ -194,17 +208,64 @@ for(i=0;i<filedata.length;i++)
 }
 Promise.all(ilpromises).then(function(identifiedLanguages){
 	console.log("done");
-	console.log(JSON.Stringify(identifiedLanguages));
-});
+	//console.log(JSON.stringify(identifiedLanguages));
+	
+	var total=identifiedLanguages.length;
+	console.log(total);
+	var recognisedLang=[];
+	for(var j=0;j<total;j++)
+	 recognisedLang.push(identifiedLanguages[j].languages[0].language);
+	//identified_lang_obj.languages[]
+	return recognisedLang;
+	}).then(function(recognisedLang){
+		console.log(recognisedLang);
+		var tlpromises=[];
+		for(i=0;i<recognisedLang.length;i++)
+			tlpromises.push(translate(filedata[i],recognisedLang[i],'en'));	
+		Promise.all(tlpromises).then(function(translation){
+			var total=translation.length;
+			//console.log(total);
+			var translated_data=[];
+			for(var j=0;j<total;j++)
+				translated_data.push(translation[j].translations[0].translation);
+			return translated_data;
+		}).then(function(translated_data){
+			//console.log(translated_data);
+			var tpromises=[];
+			for(var i=0;i<translated_data.length;i++) 
+				tpromises.push(analyzeTone(translated_data[i]));
+			Promise.all(tpromises).then(function(tones) {
+			console.log(JSON.stringify(tones,null,3));
+			fs.writeFile(path.resolve(__dirname, 'saved/tones.json'), JSON.stringify(tones,null,3),'utf8', (err) => {
+			if (err) throw err;
+			console.log('The file tones has been saved!');
+				});
+			});
+			//will run parallelly ???
+			var ppromises=[];
+			for(var i=0;i<translated_data.length;i++) 
+				ppromises.push(analyzePersonality(translated_data[i]));
+			Promise.all(ppromises).then(function(profiles) {
+			console.log(JSON.stringify(profiles,null,3));
+			fs.writeFile(path.resolve(__dirname, 'saved/profiles.json'), JSON.stringify(profiles,null,3),'utf8', (err) => {
+			if (err) throw err;
+			console.log('The file profiles has been saved!');
+				});
+			});
+		  });
+	});
+	
+	
+
+/*
 for(i=0;i<filedata.length;i++)
 { 
  tpromises.push(analyzeTone(filedata[i]));
 }
 Promise.all(tpromises).then(function(tones) {
     console.log("done");
-	return res.json(tones);
-	//console.log(response);
-	//console.log(JSON.stringify(tones)); //use tones here
+	console.log(tones);
+	
 	
 	
 });
@@ -223,8 +284,10 @@ Promise.all(ppromises).then(function(profiles) {
 	
 }); 
 */
-//personality=analyzePersonality(fildata);
+//personality=analyzePersonality(fildata);*/
 }
+//console.log(response);
+	//console.log(JSON.stringify(tones)); //use tones here
 /*fs.readdir(path.resolve(__dirname, 'uploads/'), function(err, items) {
     console.log(items);
 
