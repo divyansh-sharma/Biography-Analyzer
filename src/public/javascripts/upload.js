@@ -26,6 +26,7 @@ $('.result-btn').on('click', function (){
       contentType: 'application/json',
       success: function(data){
           console.log('keyword transfer successful!\n');
+		  alert(data);
       },
 	   });
 	
@@ -56,6 +57,7 @@ $('#upload-input').on('change', function(){
       contentType: false,
       success: function(data){
           console.log('upload successful!\n' + data);
+		  
       },
       xhr: function() {
         // create an XMLHttpRequest

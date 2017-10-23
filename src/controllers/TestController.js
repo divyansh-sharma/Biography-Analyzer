@@ -170,18 +170,6 @@ async function helloWorld(req, res) {
 	
 	});
 } */
-
-async function getResults(req,res){
-var fs= require('fs');
-var path = require('path');
-fs.writeFile(path.resolve(__dirname, 'saved/keywords.json'), JSON.stringify(req.body,null,3),'utf8', (err) => {
-			if (err) throw err;
-			console.log('The file keywords has been saved!');
-				});
-//res.end(JSON.stringify(req.body));
-var filedata = [];
-var fnames=[];
-var blahhh=[];
 /*readFileContents(path.resolve(__dirname, 'uploads/'))
 .then(function(fdata){
 	console.log(fdata); //print all file contents
@@ -189,18 +177,25 @@ var blahhh=[];
 .catch(function(err) {
      console.log(err);
    }); */
-   
+   /*for (var i=0; i<filedata.length; i++) {
+translated_data.push(translate(filedata[i]));
+} */
+async function getInsights(req,callback){
+var fs= require('fs');
+var path = require('path');
+fs.writeFile(path.resolve(__dirname, 'saved/keywords.json'), JSON.stringify(req.body,null,3),'utf8', (err) => {
+			if (err) throw err;
+			console.log('The file keywords has been saved!');
+				});
+var filedata = [];
+var fnames=[];  
 fnames=fs.readdirSync(path.resolve(__dirname, 'uploads/'));
 for (var i=0; i<fnames.length; i++) {
         console.log(fnames[i]);
 		console.log(path.resolve(__dirname, 'uploads/'+fnames[i]));
 		filedata.push(fs.readFileSync(path.resolve(__dirname, 'uploads/'+fnames[i]),'utf-8'));
 }
-console.log(filedata); // filedata is now a array of file contents
-/*for (var i=0; i<filedata.length; i++) {
-translated_data.push(translate(filedata[i]));
-} */
-
+//console.log(filedata); // filedata is now a array of file contents
 var ilpromises=[];
 for(i=0;i<filedata.length;i++)
 {
@@ -235,10 +230,11 @@ Promise.all(ilpromises).then(function(identifiedLanguages){
 			for(var i=0;i<translated_data.length;i++) 
 				tpromises.push(analyzeTone(translated_data[i]));
 			Promise.all(tpromises).then(function(tones) {
-			console.log(JSON.stringify(tones,null,3));
+			//console.log(JSON.stringify(tones,null,3));
 			fs.writeFile(path.resolve(__dirname, 'saved/tones.json'), JSON.stringify(tones,null,3),'utf8', (err) => {
 			if (err) throw err;
 			console.log('The file tones has been saved!');
+			callback();
 				});
 			});
 			//will run parallelly ???
@@ -246,17 +242,52 @@ Promise.all(ilpromises).then(function(identifiedLanguages){
 			for(var i=0;i<translated_data.length;i++) 
 				ppromises.push(analyzePersonality(translated_data[i]));
 			Promise.all(ppromises).then(function(profiles) {
-			console.log(JSON.stringify(profiles,null,3));
+			//console.log(JSON.stringify(profiles,null,3));
 			fs.writeFile(path.resolve(__dirname, 'saved/profiles.json'), JSON.stringify(profiles,null,3),'utf8', (err) => {
 			if (err) throw err;
 			console.log('The file profiles has been saved!');
 				});
 			});
+			
 		  });
-	});
-	
-	
+		  
+	});	
 
+}
+/*
+we want function 2 to only start when 1 has finished,callback means after you are done your async things call this callback function
+so here after function 1 does all the async things and we call the callback,it will call the function2
+$('a.button').click(function(){
+    if (condition == 'true'){
+        function1(someVariable, function() {
+          function2(someOtherVariable);
+        });
+    }
+    else {
+        doThis(someVariable);
+    }
+});
+
+
+function function1(param, callback) {
+  ...do stuff
+  callback();
+} 
+*/
+async function getResults(req,res){
+getInsights(req,function(){ //we want getinsights to finish before it moves to inside function
+	var fs= require('fs');
+	var path = require('path');
+	console.log("i mhere");
+	var fnames=[];
+	fnames=fs.readdirSync(path.resolve(__dirname, 'saved/'));
+	console.log(fnames);
+	res.send(fnames);
+});
+
+
+	
+}
 /*
 for(i=0;i<filedata.length;i++)
 { 
@@ -285,7 +316,6 @@ Promise.all(ppromises).then(function(profiles) {
 }); 
 */
 //personality=analyzePersonality(fildata);*/
-}
 //console.log(response);
 	//console.log(JSON.stringify(tones)); //use tones here
 /*fs.readdir(path.resolve(__dirname, 'uploads/'), function(err, items) {
