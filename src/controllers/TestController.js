@@ -280,9 +280,40 @@ getInsights(req,function(){ //we want getinsights to finish before it moves to i
 	var path = require('path');
 	console.log("i mhere");
 	var fnames=[];
+	var filedata=[];
 	fnames=fs.readdirSync(path.resolve(__dirname, 'saved/'));
 	console.log(fnames);
-	res.send(fnames);
+	for (var i=0; i<fnames.length; i++) {
+        console.log(fnames[i]);
+		console.log(path.resolve(__dirname, 'uploads/'+fnames[i]));
+		filedata.push(fs.readFileSync(path.resolve(__dirname, 'saved/'+fnames[i]),'utf-8'));
+	}
+	console.log(filedata);
+	res.json( [{
+                     score: 0.114145,
+                     tone_id: "anger",
+                     tone_name: "Anger"
+                  },
+                  {
+                     score: 0.106349,
+                     tone_id: "disgust",
+                     tone_name: "Disgust"
+                  },
+                  {
+                     score: 0.116779,
+                     tone_id: "fear",
+                     tone_name: "Fear"
+                  },
+                  {
+                     score: 0.615057,
+                     tone_id: "joy",
+                     tone_name: "Joy"
+                  },
+                  {
+                     score: 0.546554,
+                     tone_id: "sadness",
+                     tone_name: "Sadness"
+                  }]);
 });
 
 
