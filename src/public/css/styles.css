@@ -63,8 +63,22 @@ h2 {
   padding-top: 20px;
   padding-bottom: 20px;
 }
+.graph{
+	background-color: white;
+    width: 390px;
+	height:400px;
+    padding: 25px;
+    margin: 25px;
+	float:left;
+}
 #upload-input {
   display: none;
+}
+.center{
+	float:center;
+}
+.right{
+	float:right;
 }
 
 @media (min-width: 768px) {

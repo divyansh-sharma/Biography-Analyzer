@@ -30,18 +30,96 @@ $('.result-btn').on('click', function (){
           console.log('keyword transfer successful!\n');
 		  //alert(JSON.stringify(data,null,3));
 		  $('#loading').hide();
-		  $('html,body').animate({
-        scrollTop: $("#graph").offset().top},
-        'slow');
+		console.log(JSON.stringify(data,null,3));
+		var profiles=data[1].profiles;
+		var tones=data[2].tones;
+		var emotions=[],language=[],social=[];
+		for(var i=0;i<5;i++)
+		emotions.push(tones[i]);
+	    for(;i<8;i++)
+		language.push(tones[i]);
+	    for(;i<13;i++)
+		social.push(tones[i]);
+		console.log(profiles);
+		var personality=[],needs=[],values=[];
+		for(var i=0;i<10;i++)
+		personality.push(profiles[i]);
+	    for(;i<13;i++)
+		needs.push(profiles[i]);
+	    for(;i<16;i++)
+		values.push(profiles[i]);
+		
 		  Morris.Bar({
-  element: 'graph',
+  element: 'emotional',
   data: 
-    data
+    emotions
   ,
   xkey: 'tone_name',
   ykeys: ['score'],
-  labels: ['Emotional Tones']
+  labels: ['Emotional Tones'],
+  xLabelAngle: 60
 });
+
+Morris.Bar({
+  element: 'language',
+  data: 
+    language
+  ,
+  xkey: 'tone_name',
+  ykeys: ['score'],
+  labels: ['Language Tones'],
+  xLabelAngle: 60
+});
+
+Morris.Bar({
+  element: 'social',
+  data: 
+    social
+  ,
+  xkey: 'tone_name',
+  ykeys: ['score'],
+  labels: ['Social Tones'],
+  xLabelAngle: 60
+});
+ Morris.Bar({
+  element: 'personality',
+  data: 
+    personality
+  ,
+  xkey: 'tone_name',
+  ykeys: ['score'],
+  labels: ['Personality'],
+  xLabelAngle: 60
+});
+ Morris.Bar({
+  element: 'needs',
+  data: 
+    needs
+  ,
+  xkey: 'tone_name',
+  ykeys: ['score'],
+  labels: ['Needs'],
+  xLabelAngle: 60
+});
+ Morris.Bar({
+  element: 'values',
+  data: 
+    values
+  ,
+  xkey: 'tone_name',
+  ykeys: ['score'],
+  labels: ['Values'],
+  xLabelAngle: 60
+});
+$('#emotional').css("display","block");
+$('#language').css("display","block");
+$('#social').css("display","block");
+$('#personality').css("display","block");
+$('#needs').css("display","block");
+$('#values').css("display","block");
+$('html,body').animate({
+        scrollTop: $("#personality").offset().top},
+        'slow');
       },
 	    xhr: function() {
         // create an XMLHttpRequest
