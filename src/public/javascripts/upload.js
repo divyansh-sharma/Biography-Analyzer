@@ -30,7 +30,7 @@ $('.result-btn').on('click', function (){
           console.log('keyword transfer successful!\n');
 		  //alert(JSON.stringify(data,null,3));
 		  $('#loading').hide();
-		console.log(JSON.stringify(data,null,3));
+		//console.log(JSON.stringify(data,null,3));
 		var trans_data=data[3].translated_data;
 		trans_data=trans_data.toLowerCase();
 		var keywords=data[0].keywords;
@@ -43,7 +43,7 @@ $('.result-btn').on('click', function (){
 		language.push(tones[i]);
 	    for(;i<13;i++)
 		social.push(tones[i]);
-		console.log(profiles);
+		//console.log(profiles);
 		var personality=[],needs=[],values=[];
 		for(var i=0;i<10;i++)
 		personality.push(profiles[i]);
@@ -79,8 +79,8 @@ else return "blue";
 });
 top_emotions = [...new Set(top_emotions)];
 likely_emotions=[...new Set(likely_emotions)];
-console.log(top_emotions);
-console.log(likely_emotions);
+//console.log(top_emotions);
+//console.log(likely_emotions);
 $('#language').css("width","390px");
 $('#language').css("height","500px");
 $('#language').css("float","left");
@@ -232,8 +232,8 @@ for(var ni=0;ni<non_tech_keys.length;ni++)
  if(matches!=null)
 	 total_non_tech_matches+=matches.length;
 }
-console.log("tech match "+total_tech_matches);
-console.log("non tech match "+total_non_tech_matches);
+//console.log("tech match "+total_tech_matches);
+//console.log("non tech match "+total_non_tech_matches);
 
 var percentmatch=((total_non_tech_matches+total_tech_matches)/(non_tech_keys.length+tech.length))*100;
 var matchtext;

@@ -16,11 +16,15 @@ export default {
 function refresh(){
 	var fs= require('fs');
 	var path = require('path');
+	var dir=path.resolve(__dirname, 'uploads');
+	if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
 	var fnames=[];
 	fnames=fs.readdirSync(path.resolve(__dirname, 'uploads/'));
 	for (var i=0; i<fnames.length; i++) {
 	fs.unlinkSync(path.resolve(__dirname, 'uploads/'+fnames[i]));
-    console.log('successfully deleted file '+path.resolve(__dirname, 'uploads/'+fnames[i]));
+    //console.log('successfully deleted file '+path.resolve(__dirname, 'uploads/'+fnames[i]));
 
 }
 }
@@ -183,38 +187,42 @@ translated_data.push(translate(filedata[i]));
 async function getInsights(req,callback){
 var fs= require('fs');
 var path = require('path');
+var dir=path.resolve(__dirname, 'saved');
+	if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
 fs.writeFile(path.resolve(__dirname, 'saved/keywords.json'), JSON.stringify(req.body,null,3),'utf8', (err) => {
 			if (err) throw err;
-			console.log('The file keywords has been saved!');
+			//console.log('The file keywords has been saved!');
 				});
 var filedata = [];
 var fnames=[];  
 fnames=fs.readdirSync(path.resolve(__dirname, 'uploads/'));
 for (var i=0; i<fnames.length; i++) {
-        console.log(fnames[i]);
-		console.log(path.resolve(__dirname, 'uploads/'+fnames[i]));
+        //console.log(fnames[i]);
+		//console.log(path.resolve(__dirname, 'uploads/'+fnames[i]));
 		filedata.push(fs.readFileSync(path.resolve(__dirname, 'uploads/'+fnames[i]),'utf-8'));
 }
 //console.log(filedata); // filedata is now a array of file contents
-console.log(filedata);
+//console.log(filedata);
 var ilpromises=[];
 for(i=0;i<filedata.length;i++)
 {
  ilpromises.push(identifyLanguage(filedata[i]));	
 }
 Promise.all(ilpromises).then(function(identifiedLanguages){
-	console.log("done");
+	//console.log("done");
 	//console.log(JSON.stringify(identifiedLanguages));
 	
 	var total=identifiedLanguages.length;
-	console.log(total);
+	//console.log(total);
 	var recognisedLang=[];
 	for(var j=0;j<total;j++)
 	 recognisedLang.push(identifiedLanguages[j].languages[0].language);
 	//identified_lang_obj.languages[]
 	return recognisedLang;
 	}).then(function(recognisedLang){
-		console.log(recognisedLang);
+		//console.log(recognisedLang);
 		var tlpromises=[];
 		for(i=0;i<recognisedLang.length;i++)
 			tlpromises.push(translate(filedata[i],recognisedLang[i],'en'));	
@@ -240,7 +248,7 @@ Promise.all(ilpromises).then(function(identifiedLanguages){
 			//console.log(JSON.stringify(tones,null,3));
 			fs.writeFile(path.resolve(__dirname, 'saved/tones.json'), JSON.stringify(tones,null,3),'utf8', (err) => {
 			if (err) throw err;
-			console.log('The file tones has been saved!');
+			//console.log('The file tones has been saved!');
 			callback();
 				});
 			});
@@ -252,7 +260,7 @@ Promise.all(ilpromises).then(function(identifiedLanguages){
 			//console.log(JSON.stringify(profiles,null,3));
 			fs.writeFile(path.resolve(__dirname, 'saved/profiles.json'), JSON.stringify(profiles,null,3),'utf8', (err) => {
 			if (err) throw err;
-			console.log('The file profiles has been saved!');
+			//console.log('The file profiles has been saved!');
 				});
 			});
 			
@@ -287,7 +295,7 @@ return new Promise(function(resolve,reject){
 	getInsights(req,function(){ //we want getinsights to finish before it moves to inside function
 	var fs= require('fs');
 	var path = require('path');
-	console.log("i mhere");
+	//console.log("i mhere");
 	var fnames=[];
 	var response=[];
 	var data;
@@ -295,18 +303,18 @@ return new Promise(function(resolve,reject){
 	console.log(fnames);
 	console.log(fnames.length);
 	for (var i=0; i<fnames.length; i++) {
-        console.log(i);
-		console.log(path.resolve(__dirname, 'saved/'+fnames[i]));
+        //console.log(i);
+		//console.log(path.resolve(__dirname, 'saved/'+fnames[i]));
 		var data=fs.readFileSync(path.resolve(__dirname, 'saved/'+fnames[i]),'utf-8');
 		if(fnames[i]=="keywords.json"){
 			data=JSON.parse(data);
-			console.log("in keywords json");
+			//console.log("in keywords json");
 			response.push({keywords:data
 			});
 		}
 		else if(fnames[i]=="profiles.json"){
 			data=JSON.parse(data);
-			console.log("in profiles json");
+			//console.log("in profiles json");
 			//console.log(data[0]);
 		 var imagination=0,intellect=0,achievement_striving=0,dutiful=0,self_discipline=0,self_efficacy=0,cheerful=0,outgoing=0,cooperation=0,uncompromising=0,trust=0,worry=0,stress=0,challenge=0,practicality=0,structure=0,openness_to_change=0,self_enhancement=0,self_transcedence=0;
 		 for(var j=0;j<data.length;j++) //file 1,file 2,...
@@ -324,7 +332,7 @@ return new Promise(function(resolve,reject){
 					break;
 					case 1:
 					achievement_striving+=common[0].percentile;
-					console.log("imagination "+achievement_striving);
+					//console.log("imagination "+achievement_striving);
 					dutiful+=common[2].percentile;
 					self_discipline+=common[4].percentile;
 					self_efficacy+=common[5].percentile;
@@ -450,7 +458,7 @@ return new Promise(function(resolve,reject){
 		}
 		else if(fnames[i]=="tones.json"){
 		data=JSON.parse(data);
-		console.log("in tones json");
+		//console.log("in tones json");
 		var anger=0,disgust=0,fear=0,joy=0,sadness=0,analytical=0,tentative=0,confident=0,openness_big5=0,conscientiousness_big5=0,extraversion_big5=0,agreeableness_big5=0,emotional_range_big5=0;
 		for(var j=0;j<data.length;j++) //file 1,file 2,...
 		{
@@ -626,9 +634,12 @@ var form = new formidable.IncomingForm();
 var fs = require('fs');
   // specify that we want to allow the user to upload multiple files in a single request
   form.multiples = true;
-
+   var dir=path.resolve(__dirname, 'uploads');
+	if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
   // store all uploads in the /uploads directory
-  form.uploadDir = path.join(__dirname, '/uploads');
+  form.uploadDir = path.join(__dirname, 'uploads');
 
   // every time a file has been uploaded successfully,
   // rename it to it's orignal name
@@ -638,7 +649,7 @@ var fs = require('fs');
 
   // log any errors that occur
   form.on('error', function(err) {
-    console.log('An error has occured: \n' + err);
+    //console.log('An error has occured: \n' + err);
   });
 
   // once all the files have been uploaded, send a response to the client
@@ -653,6 +664,8 @@ var fs = require('fs');
 async function getFiles(req,res) {
   refresh();
   var path = require('path');
+  var dir=path.join(__dirname,'views');
+ 
   res.sendFile(path.join(__dirname, 'views/index.html'));
 }
 async function testMethod(req, res) {
