@@ -31,6 +31,9 @@ $('.result-btn').on('click', function (){
 		  //alert(JSON.stringify(data,null,3));
 		  $('#loading').hide();
 		console.log(JSON.stringify(data,null,3));
+		var trans_data=data[3].translated_data;
+		trans_data=trans_data.toLowerCase();
+		var keywords=data[0].keywords;
 		var profiles=data[1].profiles;
 		var tones=data[2].tones;
 		var emotions=[],language=[],social=[];
@@ -48,8 +51,15 @@ $('.result-btn').on('click', function (){
 		needs.push(profiles[i]);
 	    for(;i<16;i++)
 		values.push(profiles[i]);
-		
-		  Morris.Bar({
+		$('#tones').css("display","block");
+		$('#tones').css("height","600px");
+		$('#emotional').css("width","390px");
+		$('#emotional').css("height","500px");
+		$('#emotional').css("marginLeft","20px");
+		$('#emotional').css("float","left");
+		var top_emotions=[];
+		var likely_emotions=[];
+		 Morris.Bar({
   element: 'emotional',
   data: 
     emotions
@@ -57,9 +67,25 @@ $('.result-btn').on('click', function (){
   xkey: 'tone_name',
   ykeys: ['score'],
   labels: ['Emotional Tones'],
-  xLabelAngle: 60
+  xLabelAngle: 60,
+  barColors: function (row, series, type) {
+//console.log("--> "+row.label, series, type);
+if(series.key=="score"){
+if(row.y > 0.5 && row.y <0.75) {likely_emotions.push(row.label);return "green";}
+else if(row.y >0.75) {top_emotions.push(row.label);return "red";}
+else return "blue";
+}
+}
 });
-
+top_emotions = [...new Set(top_emotions)];
+likely_emotions=[...new Set(likely_emotions)];
+console.log(top_emotions);
+console.log(likely_emotions);
+$('#language').css("width","390px");
+$('#language').css("height","500px");
+$('#language').css("float","left");
+var top_language=[];
+var likely_language=[];
 Morris.Bar({
   element: 'language',
   data: 
@@ -68,9 +94,24 @@ Morris.Bar({
   xkey: 'tone_name',
   ykeys: ['score'],
   labels: ['Language Tones'],
-  xLabelAngle: 60
+  xLabelAngle: 60,
+  barColors: function (row, series, type) {
+//console.log("--> "+row.label, series, type);
+if(series.key=="score"){
+if(row.y > 0.5 && row.y <0.75) {likely_language.push(row.label);return "green";}
+else if(row.y >0.75) {top_language.push(row.label);return "red";}
+else return "blue";
+}
+}
 });
-
+top_language = [...new Set(top_language)];
+likely_language=[...new Set(likely_language)];
+$('#social').css("width","390px");
+$('#social').css("height","500px");
+$('#social').css("float","left");
+$('#social').css("marginLeft","20px");
+var top_social=[];
+var likely_social=[];
 Morris.Bar({
   element: 'social',
   data: 
@@ -79,9 +120,26 @@ Morris.Bar({
   xkey: 'tone_name',
   ykeys: ['score'],
   labels: ['Social Tones'],
-  xLabelAngle: 60
+  xLabelAngle: 60,
+  barColors: function (row, series, type) {
+//console.log("--> "+row.label, series, type);
+if(series.key=="score"){
+if(row.y > 0.5 && row.y <0.75) {likely_social.push(row.label); return "green";}
+else if(row.y >0.75) {top_social.push(row.label);return "red";}
+else return "blue";
+}
+}
 });
- Morris.Bar({
+top_social = [...new Set(top_social)];
+likely_social=[...new Set(likely_social)];
+$('#persona').css("display","block");
+$('#persona').css("height","600px");
+$('#personality').css("width","500px");
+$('#personality').css("height","500px");
+$('#personality').css("float","left");
+var top_persona=[];
+var likely_persona=[];
+Morris.Bar({
   element: 'personality',
   data: 
     personality
@@ -89,8 +147,23 @@ Morris.Bar({
   xkey: 'tone_name',
   ykeys: ['score'],
   labels: ['Personality'],
-  xLabelAngle: 60
+  xLabelAngle: 60,
+  barColors: function (row, series, type) {
+//console.log("--> "+row.label, series, type);
+if(series.key=="score"){
+if(row.y > 0.5 && row.y <0.75) {likely_persona.push(row.label);return "green";}
+else if(row.y >0.75) {top_persona.push(row.label);return "red";}
+else return "blue";
+}
+}
 });
+top_persona = [...new Set(top_persona)];
+likely_persona=[...new Set(likely_persona)];
+$('#needs').css("width","390px");
+$('#needs').css("height","500px");
+$('#needs').css("float","left");
+var top_needs=[];
+var likely_needs=[];
  Morris.Bar({
   element: 'needs',
   data: 
@@ -99,28 +172,90 @@ Morris.Bar({
   xkey: 'tone_name',
   ykeys: ['score'],
   labels: ['Needs'],
-  xLabelAngle: 60
+  xLabelAngle: 60,
+  barColors: function (row, series, type) {
+//console.log("--> "+row.label, series, type);
+if(series.key=="score"){
+if(row.y > 0.5 && row.y <0.75) {likely_needs.push(row.label);return "green";}
+else if(row.y >0.75) {top_needs.push(row.label);return "red";}
+else return "blue";
+}
+}
 });
+top_needs = [...new Set(top_needs)];
+likely_needs=[...new Set(likely_needs)];
+$('#values').css("width","390px");
+$('#values').css("height","500px");
+$('#values').css("float","left");
+var top_values=[];
+var likely_values=[];
  Morris.Bar({
   element: 'values',
   data: 
     values
   ,
+  
   xkey: 'tone_name',
   ykeys: ['score'],
   labels: ['Values'],
-  xLabelAngle: 60
+  xLabelAngle: 60,
+  barColors: function (row, series, type) {
+//console.log("--> "+row.label, series, type);
+if(series.key=="score"){
+if(row.y > 0.5 && row.y <0.75) {likely_values.push(row.label);return "green";}
+else if(row.y >0.75) {top_values.push(row.label);return "red";}
+else return "blue";
+}
+}
 });
-$('#emotional').css("display","block");
-$('#language').css("display","block");
-$('#social').css("display","block");
-$('#personality').css("display","block");
-$('#needs').css("display","block");
-$('#values').css("display","block");
+top_values = [...new Set(top_values)];
+likely_values=[...new Set(likely_values)];
+var all_top_traits=top_emotions.join()+","+likely_emotions.join()+","+top_language.join()+","+likely_language.join()+","+top_needs.join()+","+likely_needs.join()+","+top_persona.join()+","+likely_persona.join()+","+top_social.join()+","+likely_social.join()+","+top_values.join()+","+likely_values.join();
+all_top_traits=all_top_traits.toLowerCase();
+var non_tech_keys=keywords.emokeywords.toLowerCase().split(',');
+var tech=keywords.techkeywords.toLowerCase().split(',');
+var total_tech_matches=0;
+var total_non_tech_matches=0;
+for(var fi=0;fi<tech.length;fi++)
+{   var regex = new RegExp("\\b" + tech[fi] + "\\b");
+	var matches=trans_data.match(regex);
+	if(matches!=null)
+		total_tech_matches+=matches.length;
+		
+}
+for(var ni=0;ni<non_tech_keys.length;ni++)
+{var regex = new RegExp("\\b" + non_tech_keys[ni] + "\\b");
+ var matches=all_top_traits.match(regex);
+ if(matches!=null)
+    total_non_tech_matches+=matches.length;
+ var matches = trans_data.match(regex);
+ if(matches!=null)
+	 total_non_tech_matches+=matches.length;
+}
+console.log("tech match "+total_tech_matches);
+console.log("non tech match "+total_non_tech_matches);
+
+var percentmatch=((total_non_tech_matches+total_tech_matches)/(non_tech_keys.length+tech.length))*100;
+var matchtext;
+if(percentmatch>30 && percentmatch<=40)
+	matchtext="Good Match";
+else if(percentmatch>40 && percentmatch<=60)
+	matchtext="Great Match";
+else if(percentmatch>60 && percentmatch<=80)
+	matchtext="Excellent Match";
+else if(percentmatch>80)
+	matchtext="Perfect Match";
+else
+	matchtext="This is not exactly what you might be looking for.Please review Tone and Personality insights for greater details.";
+
+$("#persona").after('</br></br><h2>Matches</h2></br></br><p>Match Result :'+matchtext+'</p>');
+
 $('html,body').animate({
-        scrollTop: $("#personality").offset().top},
+        scrollTop: $("#tones").offset().top},
         'slow');
-      },
+      } 
+
+,
 	    xhr: function() {
         // create an XMLHttpRequest
         var xhr = new XMLHttpRequest();

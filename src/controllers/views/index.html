@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>File Uploader - coligo.io</title>
+  <title>Biography Analyzer - IBM Watson</title>
   <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link href="css/styles.css" rel="stylesheet">
@@ -19,7 +19,8 @@
           <div class="panel-body">
             <span class="glyphicon glyphicon-cloud-upload"></span>
             <h2>Upload Applications/Letters</h2>
-            <h4>Select multiple files</h4>
+            <h4>You can select multiple files of any language supported by watson</h4>
+			<h5>Language of the document is automatically detected and translated | Please input only text files</h5>
             <div class="progress">
               <div class="progress-bar" id="bar1"role="progressbar"></div>
             </div>
@@ -38,7 +39,8 @@
           <div class="panel-body" id="panel-body1">
            <span><img src="/images/key.png"></span>
             <h2>Enter Keywords</h2>
-            <h4>Divyansh Sharma</h4>
+            <h4>Enter keywords what you are looking in a candidate</h4>
+			<h5>You can enter technical as well as emotional keywords like sadness,anger,confident,intellect etc. | For more reference on such keywords :<a href="https://personality-insights-livedemo.mybluemix.net/">Personality Insights</a></h5>
             <label>Technical Keywords : </label><input id="techkeywords" type="text"></input>
 			<label>Emotional Keywords : </label><input id="emokeywords" type="text"></input>
 			</br>
@@ -56,8 +58,8 @@
           <div class="panel-body" id="panel-body2">
             <span><img src="/images/results.jpg"></span>
             <h2>Results</h2>
-            <h4>Divyansh Sharma</h4>
-            
+            <h4>Click on Get Matches button to get Tone,Personality and Match detail</h4>
+            <h5>Scroll down after page is loaded to check matches and individual's tone and personality profile</h5>
             <button class="btn btn-lg result-btn" type="button">Get Matches</button>
 			 <div id="loading" style="display:none;">
 			<span>
@@ -70,14 +72,50 @@
     </div>
   </div>
   
-  <div class="graph" id="emotional" style="display:none;"></div>
+
+
+  <div id="tones" style="display:none;">
+   <h2>Tone Insights</h2>
+   
+</br>
+<center>
+<img src="/images/blue.png"></img> Tone Score < 0.5 = Unlikely that attribute is present
+</br>
+<img src="/images/green.png"></img> Tone Score > 0.5 = Likely that attribute is present
+</br>
+<img src="/images/red.png"></img> Tone Score > 0.75 = Very Likely that attribute is present
+ </br>
+  Hover over Tones to get tone score
+ </center>
+   <div  id="emotional" ></div>
+  <div  id="language" ></div>
+  <div id="social" ></div>
+ 
+  </div>
   
-  <div class="graph" id="language" style="display:none;"></div>
-  <div class="graph" id="social" style="display:none;"></div>
+ 
   <br></br>
-  <div class="graph" id="personality" style="display:none;"></div>
-  <div class="graph" id="needs" style="display:none;"></div>
-  <div class="graph" id="values" style="display:none;"></div>
+  <br></br>
+  <br></br>
+   <div id="persona" style="display:none;">
+   <h2>Personality Insights</h2>
+   </br>
+<center>
+<img src="/images/blue.png"></img> Personality Score < 0.5 = Unlikely that attribute is present
+</br>
+<img src="/images/green.png"></img> Personality Score > 0.5 = Likely that attribute is present
+</br>
+<img src="/images/red.png"></img> Personality Score > 0.75 = Very Likely that attribute is present
+ </br>
+ Hover over Personality traits to get personality score
+ <center>
+   <div class="graph" id="personality" ></div>
+  <div class="graph" id="needs" ></div>
+  <div class="graph" id="values" ></div>
+  
+  </div>
+  
+  
   <input id="upload-input" type="file" name="uploads[]" multiple="multiple"></br>
   
   <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>

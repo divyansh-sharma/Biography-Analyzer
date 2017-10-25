@@ -196,6 +196,7 @@ for (var i=0; i<fnames.length; i++) {
 		filedata.push(fs.readFileSync(path.resolve(__dirname, 'uploads/'+fnames[i]),'utf-8'));
 }
 //console.log(filedata); // filedata is now a array of file contents
+console.log(filedata);
 var ilpromises=[];
 for(i=0;i<filedata.length;i++)
 {
@@ -226,6 +227,12 @@ Promise.all(ilpromises).then(function(identifiedLanguages){
 			return translated_data;
 		}).then(function(translated_data){
 			//console.log(translated_data);
+			var total_trans_data=[];
+			for(var loop=0;loop<translated_data.length;loop++)
+			{
+				total_trans_data.push(translated_data[loop]);
+			}
+			fs.writeFileSync(path.resolve(__dirname, 'saved/translated_data.txt'), total_trans_data.join(),'utf8');
 			var tpromises=[];
 			for(var i=0;i<translated_data.length;i++) 
 				tpromises.push(analyzeTone(translated_data[i]));
@@ -290,13 +297,15 @@ return new Promise(function(resolve,reject){
 	for (var i=0; i<fnames.length; i++) {
         console.log(i);
 		console.log(path.resolve(__dirname, 'saved/'+fnames[i]));
-		var data=JSON.parse(fs.readFileSync(path.resolve(__dirname, 'saved/'+fnames[i]),'utf-8'));
+		var data=fs.readFileSync(path.resolve(__dirname, 'saved/'+fnames[i]),'utf-8');
 		if(fnames[i]=="keywords.json"){
+			data=JSON.parse(data);
 			console.log("in keywords json");
 			response.push({keywords:data
 			});
 		}
 		else if(fnames[i]=="profiles.json"){
+			data=JSON.parse(data);
 			console.log("in profiles json");
 			//console.log(data[0]);
 		 var imagination=0,intellect=0,achievement_striving=0,dutiful=0,self_discipline=0,self_efficacy=0,cheerful=0,outgoing=0,cooperation=0,uncompromising=0,trust=0,worry=0,stress=0,challenge=0,practicality=0,structure=0,openness_to_change=0,self_enhancement=0,self_transcedence=0;
@@ -307,13 +316,15 @@ return new Promise(function(resolve,reject){
 			for(var k=0;k<personalityy.length;k++)
 			{
 				var common=personalityy[k].children;
-				switch(j){
+				switch(k){
 					case 0:
 					imagination+=common[3].percentile;
+					
 				    intellect+=common[4].percentile;
 					break;
 					case 1:
 					achievement_striving+=common[0].percentile;
+					console.log("imagination "+achievement_striving);
 					dutiful+=common[2].percentile;
 					self_discipline+=common[4].percentile;
 					self_efficacy+=common[5].percentile;
@@ -335,18 +346,21 @@ return new Promise(function(resolve,reject){
 				
 				
 			}
-			var needss=data[i].needs;
+			//console.log(data[i]);
+			var needss=data[j].needs;
 			challenge+=needss[0].percentile;
 			practicality+=needss[8].percentile;
 			structure+=needss[11].percentile;
-			var valuess=data[i].values;
+			var valuess=data[j].values;
 			openness_to_change+=valuess[1].percentile;
 			self_enhancement+=valuess[3].percentile;
 			self_transcedence+=valuess[4].percentile;
 		 }
 		 imagination/=data.length;
 		 intellect/=data.length;
+		 console.log("before "+achievement_striving);
 		 achievement_striving/=data.length;
+		 console.log("after "+achievement_striving);
 		 dutiful/=data.length;
 		 self_discipline/=data.length;
 		 self_efficacy/=data.length;
@@ -435,6 +449,7 @@ return new Promise(function(resolve,reject){
 		 );
 		}
 		else if(fnames[i]=="tones.json"){
+		data=JSON.parse(data);
 		console.log("in tones json");
 		var anger=0,disgust=0,fear=0,joy=0,sadness=0,analytical=0,tentative=0,confident=0,openness_big5=0,conscientiousness_big5=0,extraversion_big5=0,agreeableness_big5=0,emotional_range_big5=0;
 		for(var j=0;j<data.length;j++) //file 1,file 2,...
@@ -538,6 +553,11 @@ return new Promise(function(resolve,reject){
 		]});
 		
 		
+		}
+		else if(fnames[i]=="translated_data.txt"){
+		response.push({translated_data:data
+		}
+		);
 		}
 	}
 	//console.log(filedata);

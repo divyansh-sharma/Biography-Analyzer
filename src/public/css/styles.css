@@ -5,7 +5,7 @@
 html,
 body {
   height: 100%;
-  background-color: #4791D2;
+  background-color: white;
 }
 
 body {
@@ -53,33 +53,37 @@ h4 {
   font-size: 5em;
   color: #9CA3A9;
 }
-
 h2 {
   margin-top: 15px;
   color: #68757E;
 }
+.foo {
+  width: 20px;
+  height: 20px;
+  margin: 5px;
+  border: 1px solid rgba(0, 0, 0, .2);
+}
 
+.blue {
+  background: blue;
+}
+
+.green {
+  background: green;
+}
+
+.red {
+  background: red;
+}
 .panel {
   padding-top: 20px;
   padding-bottom: 20px;
 }
-.graph{
-	background-color: white;
-    width: 390px;
-	height:400px;
-    padding: 25px;
-    margin: 25px;
-	float:left;
-}
+
 #upload-input {
   display: none;
 }
-.center{
-	float:center;
-}
-.right{
-	float:right;
-}
+
 
 @media (min-width: 768px) {
   .main-container {
