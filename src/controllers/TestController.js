@@ -31,8 +31,8 @@ function refresh(){
 function translate(filedata,langsrc,langdes){
 	var watson = require('watson-developer-cloud');
   var language_translator = watson.language_translator({
-  username: '32835e5a-e472-4c16-ab0c-b702f9ca852a',
-  password: 'MUG44fhNWSpT',
+  username: '<your-username>',
+  password: '<your-password>',
   url:'https://gateway.watsonplatform.net/language-translator/api/',
   version: 'v2'
 });
@@ -64,8 +64,8 @@ return new Promise(function(resolve, reject) {
 function identifyLanguage(filedata){
 	var watson = require('watson-developer-cloud');
 var language_translator = watson.language_translator({
-  username: '32835e5a-e472-4c16-ab0c-b702f9ca852a',
-  password: 'MUG44fhNWSpT',
+ username: '<your-username>',
+  password: '<your-password>',
   url:'https://gateway.watsonplatform.net/language-translator/api/',
   version: 'v2'
 });
@@ -83,8 +83,8 @@ function analyzeTone(filedata){
 	
 	var ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
     var tone_analyzer = new ToneAnalyzerV3({
-    username: 'cd4e8f70-e70a-4bb5-843c-105aa21b55e5',
-    password: 'qm8cDxSAX0a6',
+  username: '<your-username>',
+  password: '<your-password>',
     version_date: '2016-05-19'
 });
 return new Promise(function(resolve, reject) {
@@ -111,8 +111,8 @@ function analyzePersonality(filedata){
 	
 	var PersonalityInsightsV3 = require('watson-developer-cloud/personality-insights/v3');
    var personality_insights = new PersonalityInsightsV3({
-  username: '7c029f0f-8caa-4ace-8e51-223a19113c17',
-  password: 'nrwRQz14YOkN',
+ username: '<your-username>',
+  password: '<your-password>',
   version_date: '2016-05-19'
 });
 return new Promise(function(resolve, reject) {
